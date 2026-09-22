@@ -2,13 +2,15 @@ import "dotenv/config";
 import express from "express";
 import loginController from "./controllers/loginController";
 import registerController from "./controllers/registerController";
-import clientController from "./controllers/clientController";
+import projectRequestController from "./controllers/projectRequestController";
+import teamController from "./controllers/teamController";
 
 const app = express();
 app.use(express.json());
 
 app.post("/auth/login", loginController);
 app.post("/auth/register", registerController);
-app.post("/admin/create_client",clientController);
+app.post("/admin/create/project", projectRequestController);
+app.post("/admin/create/team", teamController);
 
-app.listen(3000);
+app.listen(3000);   
