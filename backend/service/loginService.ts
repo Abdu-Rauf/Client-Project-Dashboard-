@@ -6,25 +6,26 @@ type AuthResult = {
     token?: string
 }
 
-export default function authService(email: string, pwd: string): AuthResult {
+// this would be call repo and get users
+const users  = [
+    {
+        id:1,
+        name:"aamir",
+        email:"aamir@gmail.com",
+        pwd: "yea right",
+        role:"admin"
+    },
+    {
+        id:2,
+        name:"abswoof",
+        email:"abswoof@gmail.com",
+        pwd: "no mate",
+        role:"project manager",
+    }
+]
 
-    // this would be call repo and get users
-    const users  = [
-        {
-            id:1,
-            name:"aamir",
-            email:"aamir@gmail.com",
-            pwd: "yea right",
-            role:"admin"
-        },
-        {
-            id:2,
-            name:"abswoof",
-            email:"abswoof@gmail.com",
-            pwd: "no mate",
-            role:"project manager",
-        }
-    ]
+
+export default function authService(email: string, pwd: string): AuthResult {
 
     const user = users.find((u) => u.email === email);
     if (!user) {

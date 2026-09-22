@@ -2,26 +2,27 @@ import { RegisterBody } from "../schema/auth";
 import { User } from "../types/user";
 import { signUserToken } from "../utils/jwt";
 
+// this would be call repo and get users
+const users  = [
+    {
+        id:1,
+        name:"aamir",
+        email:"aamir@gmail.com",
+        pwd: "yea right",
+        role:"admin"
+    },
+    {
+        id:2,
+        name:"abswoof",
+        email:"abswoof@gmail.com",
+        pwd: "no mate",
+        role:"project manager",
+    }
+]
+
 
 export default function registerService(userBody: RegisterBody) {
 
-    // this would be call repo and get users
-    const users  = [
-        {
-            id:1,
-            name:"aamir",
-            email:"aamir@gmail.com",
-            pwd: "yea right",
-            role:"admin"
-        },
-        {
-            id:2,
-            name:"abswoof",
-            email:"abswoof@gmail.com",
-            pwd: "no mate",
-            role:"project manager",
-        }
-    ]
 
     const user = users.find((u) => u.email === userBody.email);
     //  do i need email regex check here? 
