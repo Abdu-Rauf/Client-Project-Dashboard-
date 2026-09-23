@@ -5,10 +5,11 @@ import registerController from "./controllers/registerController";
 import projectRequestController from "./controllers/projectRequestController";
 import teamController from "./controllers/teamController";
 import authMiddleware from "./middleware/authMiddleware";
+import roleMiddleware from "./middleware/roleMiddleware";
 
 const app = express();
 app.use(express.json());
-app.use("/admin", authMiddleware);
+app.use("/admin", authMiddleware, roleMiddleware("admin"));
 
 app.post("/auth/login", loginController);
 app.post("/auth/register", registerController);
