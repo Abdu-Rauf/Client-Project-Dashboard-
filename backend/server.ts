@@ -4,9 +4,11 @@ import loginController from "./controllers/loginController";
 import registerController from "./controllers/registerController";
 import projectRequestController from "./controllers/projectRequestController";
 import teamController from "./controllers/teamController";
+import authMiddleware from "./middleware/authMiddleware";
 
 const app = express();
 app.use(express.json());
+app.use("/admin", authMiddleware);
 
 app.post("/auth/login", loginController);
 app.post("/auth/register", registerController);
