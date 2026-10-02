@@ -1,7 +1,11 @@
 import AuthForm from '../components/AuthForm/AuthForm.tsx'
 import SubmitButton from '../components/SubmitButton.tsx'
 
-const roles = ['Admin', 'Developer', 'Project Manager'] as const
+const roles = [
+  { label: 'Admin', value: 'admin' },
+  { label: 'Developer', value: 'developer' },
+  { label: 'Project Manager', value: 'project_manager' },
+] as const
 
 export default function Register() {
   return (
@@ -14,8 +18,8 @@ export default function Register() {
             Select a role
           </option>
           {roles.map((role) => (
-            <option key={role} value={role}>
-              {role}
+            <option key={role.value} value={role.value}>
+              {role.label}
             </option>
           ))}
         </select>
