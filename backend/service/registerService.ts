@@ -1,58 +1,41 @@
 import { RegisterBody } from "../schema/auth";
-import { User } from "../types/user";
 import { signUserToken } from "../utils/jwt";
+import { prisma } from "../utils/prisma";
 
-// this would be call repo and get users
-const users  = [
-    {
-        id:1,
-        name:"aamir",
-        email:"aamir@gmail.com",
-        pwd: "yea right",
-        role:"admin"
-    },
-    {
-        id:2,
-        name:"abswoof",
-        email:"abswoof@gmail.com",
-        pwd: "no mate",
-        role:"project manager",
-    }
-]
-
-
-export default function registerService(userBody: RegisterBody) {
-
-
-    const user = users.find((u) => u.email === userBody.email);
-    //  do i need email regex check here? 
-    if (user) {
+export default async function registerService(userBody: RegisterBody) {
+    const existing = await prisma.user.findUnique({
+        where: { email: userBody.email },
+    });
+    if (existing) {
         return {
-            success:false,
-            message:"email already in use"
-        }
+            success: false,
+            message: "email already in use",
+        };
     }
-    // id would be assigned by db later   
-    const newUser: User = {
-        id: users.length + 1,
-        name: userBody.name,
-        email: userBody.email,
-        pwd: userBody.pwd,
-        role: userBody.role
-    }
-    users.push(newUser)
-
-    const token = signUserToken(newUser);
+    //  prisma.create type checks the data passed with model
+    const newUser = await prisma.user.create({
+        data: {
+            name: userBody.name,
+            email: userBody.email,
+            password_hash: userBody.pwd,
+            role: userBody.role,
+        },
+    });
+    console.log(newUser);
+    const token = signUserToken({
+        name: newUser.name,
+        role: newUser.role,
+    });
     if (!token) {
         return {
             success: false,
-            message: "JWT secret is not configured"
-        }
+            message: "JWT secret is not configured",
+        };
     }
 
     return {
         success: true,
         message: "Logged in",
-        token
-    }
+        token,
+    };
 }

@@ -2,7 +2,7 @@ import { z } from "zod";
 
 // as const tells ts to treat the arr as read only with fixed literal ([]string = readonly[admin,pm,dev])
 // ts type checks that a readonly tuple of literals is passed to z.enum (both only exist at compile time) 
-export const roles = ["admin", "developer", "project manager"] as const;
+export const roles = ["admin", "developer", "project_manager"] as const;
 
 export const loginBodySchema = z.object({
     email: z

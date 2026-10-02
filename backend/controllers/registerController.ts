@@ -4,7 +4,7 @@ import registerService from "../service/registerService";
 import { registerBodySchema } from "../schema/auth";
 
 
-export default function registerController(req: Request, res: Response) {
+export default async function registerController(req: Request, res: Response) {
 
     const parsed = registerBodySchema.safeParse(req.body);
     console.log(parsed);
@@ -16,7 +16,7 @@ export default function registerController(req: Request, res: Response) {
     }
 
     // Call service
-    const result = registerService(parsed.data);
+    const result = await registerService(parsed.data);
 
     // Convert service result into HTTP response
     if (!result.success) {

@@ -20,7 +20,7 @@ const users  = [
         name:"abswoof",
         email:"abswoof@gmail.com",
         pwd: "no mate",
-        role:"project manager",
+        role:"project_manager",
     }
 ]
 
