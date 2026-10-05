@@ -1,23 +1,22 @@
+import { prefault } from "zod";
 import { ProjectReqBody } from "../schema/projectReq";
 import { ProjectRequest } from "../types/projectRequest";
+import { prisma } from "../utils/prisma";
 
-// mock project request store (later: db)
-const projectRequests: ProjectRequest[] = [];
 
-export default function projectRequestService(projectBody: ProjectReqBody) {
+export default async function projectRequestService(projectBody: ProjectReqBody) {
     // pmid is the fk for project desc ( relationship: one to many (pm-pdesc))
-    const newRequest: ProjectRequest = {
-        id: projectRequests.length + 1,
-        title: projectBody.title,
-        description: projectBody.description,
-        pmid: projectBody.pm_id
-    };
-    projectRequests.push(newRequest);
-    console.log(projectRequests);
-
+    const prReq = await prisma.projectRequests.create({
+        data:{
+            title: projectBody.title,
+            description: projectBody.description,
+            assigned_pm_id: projectBody.assigned_pm_id,
+            deadline:projectBody.deadline,
+        }
+    });
+    console.log("Project Request:\n", prReq)
     return {
         success: true,
-        message: "Project request created",
-        projectRequest: newRequest
+        message: "Project request created"
     };
 }
