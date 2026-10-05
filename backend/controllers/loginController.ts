@@ -4,10 +4,10 @@ import authService from "../service/loginService";
 import { loginBodySchema } from "../schema/auth";
 
 
-export default function loginController(req: Request, res: Response) {
+export default async function loginController(req: Request, res: Response) {
 
     const parsed = loginBodySchema.safeParse(req.body);
-    console.log(parsed);
+    console.log("parsed body ",parsed);
     if (!parsed.success) {
         return res.status(400).json({
             message: "Invalid body",
@@ -17,7 +17,7 @@ export default function loginController(req: Request, res: Response) {
 
     // Extract email,pwd and call Servie
     const { email, pwd } = parsed.data;
-    const result = authService(email, pwd);
+    const result = await authService(email, pwd);
 
     // Convert service result into HTTP response
     if (!result.success) {

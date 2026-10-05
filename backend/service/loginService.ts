@@ -1,33 +1,13 @@
+import type { AuthResult } from "../types/auth";
 import { signUserToken } from "../utils/jwt";
+import { verifyPassword } from "../utils/password";
+import { prisma } from "../utils/prisma";
 
-type AuthResult = {
-    success: boolean
-    message: string
-    token?: string
-}
-
-// this would be call repo and get users
-const users  = [
-    {
-        id:1,
-        name:"aamir",
-        email:"aamir@gmail.com",
-        pwd: "yea right",
-        role:"admin"
-    },
-    {
-        id:2,
-        name:"abswoof",
-        email:"abswoof@gmail.com",
-        pwd: "no mate",
-        role:"project_manager",
-    }
-]
-
-
-export default function authService(email: string, pwd: string): AuthResult {
-
-    const user = users.find((u) => u.email === email);
+export default async function authService(email: string, pwd: string) : Promise<AuthResult> {
+    const user = await prisma.user.findFirst({
+        where : {email:email},
+    })
+    // const user = users.find((u) => u.email === email);
     if (!user) {
         return {
             success:false,
@@ -35,10 +15,11 @@ export default function authService(email: string, pwd: string): AuthResult {
         }
     }   
     // check if pwd is correct
-    if (user.pwd !== pwd) {
+    const verification = await verifyPassword(pwd,user.password_hash);
+    if (!verification){
         return {
             success:false,
-            message:"Please enter the correct pwd"
+            message:"Please enter the correct password"
         }
     }
 
