@@ -9,7 +9,6 @@ export default function roleMiddleware(...allowedRoles:string[]) {
     // return the actual middleware
     return (req: Request, res:Response, next:NextFunction)=>{
         const user = (req as Request & {user?:JwtPayload}).user;
-        console.log(user);
 
         if(!user || !allowedRoles.includes(user.role)){
             return res.status(403).json({message:"User not authorized"})

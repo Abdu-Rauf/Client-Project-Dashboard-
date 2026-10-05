@@ -7,7 +7,6 @@ import { registerBodySchema } from "../schema/auth";
 export default async function registerController(req: Request, res: Response) {
 
     const parsed = registerBodySchema.safeParse(req.body);
-    console.log(parsed);
     if (!parsed.success) {
         return res.status(400).json({
             message: "Invalid body",

@@ -1,8 +1,11 @@
 import { RegisterBody } from "../schema/auth";
+import type { AuthResult } from "../types/auth";
 import { signUserToken } from "../utils/jwt";
+import { hashPassword } from "../utils/password";
 import { prisma } from "../utils/prisma";
 
-export default async function registerService(userBody: RegisterBody) {
+
+export default async function registerService(userBody: RegisterBody):Promise<AuthResult> {
     const existing = await prisma.user.findUnique({
         where: { email: userBody.email },
     });
@@ -17,7 +20,7 @@ export default async function registerService(userBody: RegisterBody) {
         data: {
             name: userBody.name,
             email: userBody.email,
-            password_hash: userBody.pwd,
+            password_hash: await hashPassword(userBody.pwd),
             role: userBody.role,
         },
     });

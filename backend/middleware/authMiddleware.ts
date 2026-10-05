@@ -23,7 +23,7 @@ export default function authMiddleware(req: Request, res: Response, next: NextFu
         // we type cast decoded as jwtpayload so that we can use our fields(role,sub) without type check errors at compile time
         const decoded = jwt.verify(token, secret) as JwtPayload;
         (req as Request & { user?: JwtPayload }).user = decoded;
-        console.log(decoded);
+        console.log("decoded user", decoded);
         next();
     } catch {
         return res.status(401).json({ message: "Invalid or expired token" });
