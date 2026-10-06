@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { z } from "zod";
-import authService from "../service/loginService";
 import { loginBodySchema } from "../schema/auth";
+import loginService from "../service/loginService";
 
 
 export default async function loginController(req: Request, res: Response) {
@@ -17,7 +17,7 @@ export default async function loginController(req: Request, res: Response) {
 
     // Extract email,pwd and call Servie
     const { email, pwd } = parsed.data;
-    const result = await authService(email, pwd);
+    const result = await loginService(email, pwd);
 
     // Convert service result into HTTP response
     if (!result.success) {
