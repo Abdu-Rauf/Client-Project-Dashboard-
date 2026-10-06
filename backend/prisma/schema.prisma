@@ -27,17 +27,33 @@ enum Role {
   project_manager
   developer
 }
-enum Status {
-  to_start
+enum ProjectRequestStatus {
+  assigned
+  converted
+}
+
+enum ProjectStatus {
   in_progress
   completed
 }
 
 model ProjectRequests {
-  id             String   @id @default(uuid()) @db.Uuid
+  // @db.* tells postgres the type of data to store in the table, ie , id would have type uuid in the database
+  id             String               @id @default(uuid()) @db.Uuid
   title          String
   description    String
   assigned_pm_id Int
-  status         Status   @default(to_start)
-  deadline       DateTime @db.Date
+  status         ProjectRequestStatus @default(assigned)
+  deadline       DateTime             @db.Date
+  project        Project?
+}
+
+model Project {
+  id                 Int           @id @default(autoincrement())
+  project_request_id String        @unique @db.Uuid
+  name               String
+  description        String
+  assigned_pm_id     Int
+  status             ProjectStatus @default(in_progress)
+  projectRequest     ProjectRequests @relation(fields: [project_request_id], references: [id])
 }
