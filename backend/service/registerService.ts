@@ -24,9 +24,10 @@ export default async function registerService(userBody: RegisterBody):Promise<Au
             role: userBody.role,
         },
     });
-    console.log(newUser);
+    console.log(newUser.name)
     const token = signUserToken({
-        name: newUser.name,
+        sub: newUser.name,
+        id: newUser.id,
         role: newUser.role,
     });
     if (!token) {

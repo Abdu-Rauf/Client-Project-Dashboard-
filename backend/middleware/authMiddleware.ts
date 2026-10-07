@@ -1,10 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-
-export type JwtPayload = {
-    sub: string
-    role: string
-}
+import { JwtPayload } from "../types/auth";
 
 export default function authMiddleware(req: Request, res: Response, next: NextFunction) {
     try {
@@ -22,8 +18,7 @@ export default function authMiddleware(req: Request, res: Response, next: NextFu
         // ts doesnt sees our field values ie , it just knows decode is of type string | jwt.JwtPayload
         // we type cast decoded as jwtpayload so that we can use our fields(role,sub) without type check errors at compile time
         const decoded = jwt.verify(token, secret) as JwtPayload;
-        (req as Request & { user?: JwtPayload }).user = decoded;
-        console.log("decoded user", decoded);
+        req.user = decoded;
         next();
     } catch {
         return res.status(401).json({ message: "Invalid or expired token" });

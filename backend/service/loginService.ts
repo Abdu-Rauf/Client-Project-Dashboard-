@@ -22,8 +22,11 @@ export default async function loginService(email: string, pwd: string) : Promise
             message:"Please enter the correct password"
         }
     }
-
-    const token = signUserToken(user);
+    const token = signUserToken({
+        sub:user.name,
+        id:user.id,
+        role:user.role
+    });
     if (!token) {
         return {
             success: false,

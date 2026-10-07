@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
 
 type TokenUser = {
-    name: string
+    sub: string
+    id : number
     role: string
 }
 
@@ -13,7 +14,8 @@ export function signUserToken(user: TokenUser): string | null {
 
     return jwt.sign(
         {
-            sub: user.name,
+            sub: user.sub,
+            id:user.id, 
             role: user.role
         },
         secret,
