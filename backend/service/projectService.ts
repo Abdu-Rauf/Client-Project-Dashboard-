@@ -1,14 +1,14 @@
 import { ProjectBody } from "../schema/project";
 import { prisma } from "../utils/prisma";
 
-export default async function projectService(projectBody: ProjectBody) {
+export default async function projectService(projectBody: ProjectBody, pmId: number) {
     const developerIds = [...new Set(projectBody.developer_ids)];
 
     try {
         await prisma.$transaction(async (tx)=>{
             // verify that the project is assigned to a project manager
             const pm = await tx.user.findFirst({
-                where:{id:projectBody.assigned_pm_id, role:"project_manager"}
+                where:{id:pmId, role:"project_manager"}
             })
             if(!pm){
                 throw new Error("Project must be created by a project manager")
@@ -18,7 +18,7 @@ export default async function projectService(projectBody: ProjectBody) {
             const request = await tx.projectRequests.findFirst({
                 where: {
                     id: projectBody.project_request_id,
-                    assigned_pm_id: pm.id,
+                    assigned_pm_id: pmId,
                     status: "assigned",
                     project: { is: null },
                 },
@@ -34,7 +34,7 @@ export default async function projectService(projectBody: ProjectBody) {
                     project_request_id:request.id,
                     name:projectBody.name,
                     description:projectBody.description,
-                    assigned_pm_id:pm.id
+                    assigned_pm_id:pmId
                 }
             })
 
@@ -43,7 +43,7 @@ export default async function projectService(projectBody: ProjectBody) {
                 where: {
                     id: { in: developerIds },
                     role: "developer",
-                    manager_id: pm.id,
+                    manager_id: pmId,
                     project_id: null,
                 },
                 data: { project_id: project.id },

@@ -11,6 +11,7 @@ import projectController from "./controllers/projectController"
 const app = express();
 app.use(express.json());
 app.use("/admin", authMiddleware, roleMiddleware("admin"));
+app.use("/pm", authMiddleware, roleMiddleware("project_manager"));
 
 app.post("/auth/login", loginController);
 app.post("/auth/register", registerController);
