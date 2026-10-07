@@ -3,23 +3,24 @@
 
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
-  generator client {
-    provider = "prisma-client"
-    output   = "../generated/prisma"
-  }
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
 
-  datasource db {
-    provider = "postgresql"
-  }
+datasource db {
+  provider = "postgresql"
+}
 
 model User {
-  id             Int    @id @default(autoincrement())
-  name           String
-  email          String @unique
-  password_hash  String
-  role           Role
-  manager_id     Int?
-  project_id     Int?
+  id            Int     @id @default(autoincrement())
+  name          String
+  email         String  @unique
+  password_hash String
+  role          Role
+  manager_id    Int?
+  project_id    Int?
+  tasks         Tasks[]
 }
 
 enum Role {
@@ -27,6 +28,7 @@ enum Role {
   project_manager
   developer
 }
+
 enum ProjectRequestStatus {
   assigned
   converted
@@ -35,6 +37,18 @@ enum ProjectRequestStatus {
 enum ProjectStatus {
   in_progress
   completed
+}
+
+enum TaskStatus {
+  to_do
+  in_progress
+  completed
+}
+
+enum Priority {
+  low
+  high
+  very_high
 }
 
 model ProjectRequests {
@@ -49,11 +63,25 @@ model ProjectRequests {
 }
 
 model Project {
-  id                 Int           @id @default(autoincrement())
-  project_request_id String        @unique @db.Uuid
+  id                 Int             @id @default(autoincrement())
+  project_request_id String          @unique @db.Uuid
   name               String
   description        String
   assigned_pm_id     Int
-  status             ProjectStatus @default(in_progress)
+  status             ProjectStatus   @default(in_progress)
   projectRequest     ProjectRequests @relation(fields: [project_request_id], references: [id])
+  tasks              Tasks[]
+}
+
+model Tasks {
+  id                    String     @id @default(uuid()) @db.Uuid
+  project_id            Int
+  title                 String
+  description           String
+  assigned_developer_id Int
+  status                TaskStatus @default(to_do)
+  priority              Priority
+  deadline              DateTime   @db.Date
+  user                  User       @relation(fields: [assigned_developer_id], references: [id])
+  project               Project    @relation(fields: [project_id], references: [id])
 }
