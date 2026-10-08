@@ -1,5 +1,4 @@
 import { ProjectReqBody } from "../schema/projectReq";
-import { ProjectRequest } from "../types/projectRequest";
 import { prisma } from "../utils/prisma";
 
 
