@@ -1,13 +1,12 @@
 import { Request, Response } from "express"
 import { z } from "zod";
-import { loginBodySchema } from "../schema/auth";
-import loginService from "../service/loginService";
+import registerService from "../../service/auth/registerService";
+import { registerBodySchema } from "../../schema/auth/auth";
 
 
-export default async function loginController(req: Request, res: Response) {
+export default async function registerController(req: Request, res: Response) {
 
-    const parsed = loginBodySchema.safeParse(req.body);
-    console.log("parsed body ",parsed);
+    const parsed = registerBodySchema.safeParse(req.body);
     if (!parsed.success) {
         return res.status(400).json({
             message: "Invalid body",
@@ -15,9 +14,8 @@ export default async function loginController(req: Request, res: Response) {
         });
     }
 
-    // Extract email,pwd and call Servie
-    const { email, pwd } = parsed.data;
-    const result = await loginService(email, pwd);
+    // Call service
+    const result = await registerService(parsed.data);
 
     // Convert service result into HTTP response
     if (!result.success) {

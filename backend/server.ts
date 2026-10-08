@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express from "express";
-import loginController from "./controllers/loginController";
-import registerController from "./controllers/registerController";
+import loginController from "./controllers/auth/loginController";
+import registerController from "./controllers/auth/registerController";
 import projectRequestController from "./controllers/projectRequestController";
 import teamController from "./controllers/teamController";
 import authMiddleware from "./middleware/authMiddleware";

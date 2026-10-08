@@ -1,7 +1,7 @@
-import type { AuthResult } from "../types/auth";
-import { signUserToken } from "../utils/jwt";
-import { verifyPassword } from "../utils/password";
-import { prisma } from "../utils/prisma";
+import type { AuthResult } from "../../types/auth";
+import { signUserToken } from "../../utils/jwt";
+import { verifyPassword } from "../../utils/password";
+import { prisma } from "../../utils/prisma";
 
 export default async function loginService(email: string, pwd: string) : Promise<AuthResult> {
     const user = await prisma.user.findFirst({

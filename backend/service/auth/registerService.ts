@@ -1,8 +1,8 @@
-import { RegisterBody } from "../schema/auth";
-import type { AuthResult } from "../types/auth";
-import { signUserToken } from "../utils/jwt";
-import { hashPassword } from "../utils/password";
-import { prisma } from "../utils/prisma";
+import { RegisterBody } from "../../schema/auth/auth";
+import type { AuthResult } from "../../types/auth";
+import { signUserToken } from "../../utils/jwt";
+import { hashPassword } from "../../utils/password";
+import { prisma } from "../../utils/prisma";
 
 
 export default async function registerService(userBody: RegisterBody):Promise<AuthResult> {
